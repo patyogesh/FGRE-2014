@@ -13,10 +13,10 @@ def fgreTopo():
 	ctrl = net.addController('c0')
 
 	info( '*** Adding hosts\n' )
-	mh1 = net.addHost('mh1')
-	mh2 = net.addHost('mh2')
-	isp = net.addHost('isp')
-	client = net.addHost('client')
+	mh1 = net.addHost('mh1', ip='10.0.0.1')
+	mh2 = net.addHost('mh2', ip='10.0.0.2')
+	isp = net.addHost('isp', ip='20.0.0.1/16')
+	client = net.addHost('client', ip='30.0.0.1/24')
 
 
 	info( '*** Adding switch\n' )
@@ -41,11 +41,36 @@ def fgreTopo():
 	info( '*** Starting network\n')
 	net.start()
 
-	info( '*** Running CLI\n' )
-	CLI(net)
+	#info( '*** Running CLI\n' )
+	#CLI(net)
 
-	info( '*** Stopping network' )
-	net.stop()
+	info( '*** Configuring ISP \n' )
+	iSrPr = net.get('isp')
+	iSrPr.cmd('ifconfig lo0 20.0.0.1/16 up')
+	iSrPr.cmd('ifconfig eth0 30.0.1.2/24 up')
+	iSrPr.cmd('ifconfig eth1 30.0.2.2/24 up')
+	iSrPr.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
+	iSrPr.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
+	iSrPr.cmd('ip route add 30.0.0.0/16 via 30.0.2.1 dev eth1')
+
+	info( '*** Configuring Client \n' )
+	client1 = net.get('client')
+	client1.cmd('ifconfig eth0 30.0.100.2/24 up')
+	client1.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
+	client1.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev eth0')
+
+
+	info( '*** Running ping commands\n' )
+	host1 = net.get('mh1')
+	result1 = host1.cmd('fping -e -c 5 -i 1000 10.0.0.2')
+	print result1
+
+	host2 = net.get('mh2')
+	result2 = host2.cmd('fping -e -c 5 -i 1000 10.0.0.1')
+	print result2
+
+	#info( '*** Stopping network\n' )
+	#net.stop()
 
 if __name__ == '__main__':
 	setLogLevel( 'info' )
