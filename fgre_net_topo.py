@@ -4,20 +4,22 @@ from mininet.net import Mininet
 from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
+from mininet.node import OVSKernelSwitch, RemoteController
+from mininet.util import customConstructor
 
 def fgreTopo():
 	"Create an empty network and add nodes to it."
-	net = Mininet(controller = Controller)
-
+	
 	info( '*** Adding controller\n' )
-	ctrl = net.addController('c0')
+	ctrlr = lambda n: RemoteController(n, ip='192.168.56.1', port=6633)
+	net = Mininet(controller=ctrlr, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
+	c1 = net.addController('c1')
 
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
 	mh2 = net.addHost('mh2', ip='10.0.0.2')
-	isp = net.addHost('isp', ip='20.0.0.1/16')
-	client = net.addHost('client', ip='30.0.0.1/24')
-
+	isp = net.addHost('isp')
+	client = net.addHost('client')
 
 	info( '*** Adding switch\n' )
 	s1 = net.addSwitch('s1')
@@ -27,47 +29,46 @@ def fgreTopo():
 	s5 = net.addSwitch('s5')
 
 	info( '*** Creating links\n' )
-	net.addLink(mh1, s1)
-	net.addLink(client, s2)
-	net.addLink(mh2, s5)
-	net.addLink(s1, s2)
-	net.addLink(s2, s3)
-	net.addLink(s3, s4)
-	net.addLink(s3, s5)
-	net.addLink(s1, isp)
-	net.addLink(s5, isp)
-	#net.addLink(s4, ctrl)
+	net.addLink(mh1, s1) # S1 port 1
+	net.addLink(client, s2) # S2 port 1
+	net.addLink(mh2, s5) # S5 port 1
+	net.addLink(s1, s2) # S1 port 2, S2 port 2 
+	net.addLink(s2, s3) # S2 port 3, S3 port 1
+	net.addLink(s3, s4) # S3 port 2, S4 port 1
+	net.addLink(s3, s5) # S3 port 3, S5 port 2
+	net.addLink(s2, s4) # S2 port 4, S4 port 2
+	net.addLink(s1, isp) # S1 port 3
+	net.addLink(s5, isp) # S5 port 3
 
 	info( '*** Starting network\n')
 	net.start()
 
-	#info( '*** Running CLI\n' )
-	#CLI(net)
-
 	info( '*** Configuring ISP \n' )
-	iSrPr = net.get('isp')
-	iSrPr.cmd('ifconfig lo0 20.0.0.1/16 up')
-	iSrPr.cmd('ifconfig eth0 30.0.1.2/24 up')
-	iSrPr.cmd('ifconfig eth1 30.0.2.2/24 up')
-	iSrPr.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
-	iSrPr.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
-	iSrPr.cmd('ip route add 30.0.0.0/16 via 30.0.2.1 dev eth1')
+	isp = net.get('isp')
+	isp.cmd('ifconfig lo0 20.0.0.1/16 up')
+	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
+	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
+	isp.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
+	isp.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
+	isp.cmd('ip route add 30.0.0.0/16 via 30.0.2.1 dev isp-eth1')
 
 	info( '*** Configuring Client \n' )
-	client1 = net.get('client')
-	client1.cmd('ifconfig eth0 30.0.100.2/24 up')
-	client1.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
-	client1.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev eth0')
+	client = net.get('client')
+	client.cmd('ifconfig client-eth0 30.0.100.2/24 up')
+	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
+	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
+	
+	info( '*** Running CLI\n' )
+	CLI(net)
 
-
-	info( '*** Running ping commands\n' )
-	host1 = net.get('mh1')
-	result1 = host1.cmd('fping -e -c 5 -i 1000 10.0.0.2')
-	print result1
-
-	host2 = net.get('mh2')
-	result2 = host2.cmd('fping -e -c 5 -i 1000 10.0.0.1')
-	print result2
+	#info( '*** Running ping commands\n' )
+	#host1 = net.get('mh1')
+	#result1 = host1.cmd('fping -e -c 5 -i 1000 10.0.0.2')
+	#print result1
+    #
+	#host2 = net.get('mh2')
+	#result2 = host2.cmd('fping -e -c 5 -i 1000 10.0.0.1')
+	#print result2
 
 	#info( '*** Stopping network\n' )
 	#net.stop()
