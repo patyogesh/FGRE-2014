@@ -26,8 +26,8 @@ CLIENT_prefix = IPPrefix('30.0.100.0/24')
 MAC_ISP = MAC('66:66:66:66:66:aa')
 MAC_CLIENT = MAC('66:66:66:66:66:ac')
 
-MAC_client_gw = MAC('00:0a:aa:bb:cc:da')
-MAC_netflix_gw = MAC('00:0a:aa:bb:cc:dc')
+MAC_isp_gw = MAC('00:0a:aa:bb:cc:da')
+MAC_client_gw = MAC('00:0a:aa:bb:cc:dc')
 
 #########################
 ##
@@ -64,8 +64,8 @@ SWITCH6_PORT_SWITCH5 = 2
 ###############################
 
 infrastructure_routing_policy = (
-	(match(dstip=ISP_prefix, inport=SWITCH1_PORT_SWITCH2, switch=1) >> modify(srcmac=MAC_netflix_gw, dstmac=MAC_ISP) >> fwd(SWITCH1_EXTERNAL_PORT)) +
-	(match(dstip=ISP_prefix, inport=SWITCH5_PORT_SWITCH3, switch=5) >> modify(srcmac=MAC_netflix_gw, dstmac=MAC_ISP) >> fwd(SWITCH5_EXTERNAL_PORT)) +
+	(match(dstip=ISP_prefix, inport=SWITCH1_PORT_SWITCH2, switch=1) >> modify(srcmac=MAC_isp_gw, dstmac=MAC_ISP) >> fwd(SWITCH1_EXTERNAL_PORT)) +
+	(match(dstip=ISP_prefix, inport=SWITCH5_PORT_SWITCH3, switch=5) >> modify(srcmac=MAC_isp_gw, dstmac=MAC_ISP) >> fwd(SWITCH5_EXTERNAL_PORT)) +
 
 	(match(dstip=CLIENT_prefix, inport=SWITCH1_EXTERNAL_PORT, switch=1) >> modify(srcmac=MAC_client_gw, dstmac=MAC_CLIENT) >> fwd(SWITCH1_PORT_SWITCH2)) +
 	(match(dstip=CLIENT_prefix, inport=SWITCH5_EXTERNAL_PORT, switch=5) >> modify(srcmac=MAC_client_gw, dstmac=MAC_CLIENT) >> fwd(SWITCH5_PORT_SWITCH3)) +
