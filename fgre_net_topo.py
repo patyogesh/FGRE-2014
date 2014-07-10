@@ -12,7 +12,7 @@ def fgreTopo():
 	
 	info( '*** Adding controller\n' )	
 	remote_controller = customConstructor({'remote': RemoteController}, 'remote,ip=192.168.56.1,port=6633')
-	net = Mininet(controller = remote_controller)
+	net = Mininet(controller=remote_controller, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
 
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
@@ -43,7 +43,7 @@ def fgreTopo():
 	net.start()
 
 	#info( '*** Running CLI\n' )
-	#CLI(net)
+	CLI(net)
 
 	info( '*** Configuring ISP \n' )
 	iSrPr = net.get('isp')
