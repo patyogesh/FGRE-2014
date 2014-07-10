@@ -11,7 +11,7 @@ def fgreTopo():
 	"Create an empty network and add nodes to it."
 	
 	info( '*** Adding controller\n' )
-	ctrlr = lambda n: RemoteController(n, defaultIP='192.168.56.1', port=6633, inNamespace=False)
+	ctrlr = lambda n: RemoteController(n, ip='192.168.56.1', port=6633)
 	net = Mininet(controller=ctrlr, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
 	c1 = net.addController('c1')
 
