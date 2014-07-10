@@ -125,4 +125,8 @@ class reroute_interdomain(DynamicPolicy):
 				print "Invalid option"
 
 def main ():
-	return reroute_interdomain() >> mac_learner()
+	return if_(
+			(match(dstip=ISP_prefix) | match(dstip=CLIENT_prefix)),
+			reroute_interdomain(),
+			mac_learner()
+		)
