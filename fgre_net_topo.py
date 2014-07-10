@@ -18,8 +18,8 @@ def fgreTopo():
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
 	mh2 = net.addHost('mh2', ip='10.0.0.2')
-	isp = net.addHost('isp', ip='20.0.0.1/16')
-	client = net.addHost('client', ip='30.0.0.1/24')
+	isp = net.addHost('isp')
+	client = net.addHost('client')
 
 	info( '*** Adding switch\n' )
 	s1 = net.addSwitch('s1')
@@ -29,16 +29,16 @@ def fgreTopo():
 	s5 = net.addSwitch('s5')
 
 	info( '*** Creating links\n' )
-	net.addLink(mh1, s1)
-	net.addLink(client, s2)
-	net.addLink(mh2, s5)
-	net.addLink(s1, s2)
-	net.addLink(s2, s3)
-	net.addLink(s3, s4)
-	net.addLink(s3, s5)
-	net.addLink(s1, isp)
-	net.addLink(s5, isp)
-	#net.addLink(s4, ctrl)
+	net.addLink(mh1, s1) # S1 port 1
+	net.addLink(client, s2) # S2 port 1
+	net.addLink(mh2, s5) # S5 port 1
+	net.addLink(s1, s2) # S1 port 2, S2 port 2 
+	net.addLink(s2, s3) # S2 port 3, S3 port 1
+	net.addLink(s3, s4) # S3 port 2, S4 port 1
+	net.addLink(s3, s5) # S3 port 3, S5 port 2
+	net.addLink(s2, s4) # S2 port 4, S4 port 2
+	net.addLink(s1, isp) # S1 port 3
+	net.addLink(s5, isp) # S5 port 3
 
 	info( '*** Starting network\n')
 	net.start()
