@@ -7,10 +7,10 @@ from mininet.log import setLogLevel, info
 
 def fgreTopo():
 	"Create an empty network and add nodes to it."
-	net = Mininet(controller = Controller)
-
-	info( '*** Adding controller\n' )
-	ctrl = net.addController('c0')
+	
+	info( '*** Adding controller\n' )	
+	remote_controller = customConstructor({'remote': RemoteController}, 'remote,ip=192.168.56.1,port=6633')
+	net = Mininet(controller = remote_controller)
 
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
