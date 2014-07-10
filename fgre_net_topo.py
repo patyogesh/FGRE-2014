@@ -10,9 +10,10 @@ from mininet.util import customConstructor
 def fgreTopo():
 	"Create an empty network and add nodes to it."
 	
-	info( '*** Adding controller\n' )	
-	remote_controller = customConstructor({'remote': RemoteController}, 'remote,ip=192.168.56.1,port=6633')
-	net = Mininet(controller=remote_controller, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
+	info( '*** Adding controller\n' )
+	ctrlr = lambda n: RemoteController(n, defaultIP='192.168.56.1', port=6633, inNamespace=False)
+	net = Mininet(controller=ctrlr, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
+	c1 = net.addController('c1')
 
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
