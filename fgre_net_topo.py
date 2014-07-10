@@ -45,7 +45,7 @@ def fgreTopo():
 
 	info( '*** Configuring ISP \n' )
 	isp = net.get('isp')
-	isp.cmd('ifconfig lo0 20.0.0.1/16 up')
+	isp.cmd('ifconfig lo:1 20.0.0.1/16 up')
 	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
 	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
 	isp.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
