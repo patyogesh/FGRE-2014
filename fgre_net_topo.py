@@ -51,7 +51,7 @@ def fgreTopo():
 	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
 	
 	isp.cmd('ifconfig isp-eth1 down')
-	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:ab up')
+	isp.cmd('ifconfig isp-eth1 hw ether 66:66:66:66:66:ab up')
 	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
 
 	isp.cmd('ifconfig lo:1 20.0.0.1/16 up')
