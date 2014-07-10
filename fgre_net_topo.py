@@ -18,8 +18,8 @@ def fgreTopo():
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
 	mh2 = net.addHost('mh2', ip='10.0.0.2')
-	isp = net.addHost('isp')
-	client = net.addHost('client')
+	isp = net.addHost('isp', mac="66:66:66:66:66:aa")
+	client = net.addHost('client', mac="66:66:66:66:66:ab")
 
 	info( '*** Adding switch\n' )
 	s1 = net.addSwitch('s1')
