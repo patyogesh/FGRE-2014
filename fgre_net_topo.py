@@ -4,6 +4,7 @@ from mininet.net import Mininet
 from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
+from mininet.util import customConstructor
 
 def fgreTopo():
 	"Create an empty network and add nodes to it."
