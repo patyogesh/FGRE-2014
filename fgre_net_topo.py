@@ -18,8 +18,8 @@ def fgreTopo():
 	info( '*** Adding hosts\n' )
 	mh1 = net.addHost('mh1', ip='10.0.0.1')
 	mh2 = net.addHost('mh2', ip='10.0.0.2')
-	isp = net.addHost('isp', mac="66:66:66:66:66:aa")
-	client = net.addHost('client', mac="66:66:66:66:66:ab")
+	isp = net.addHost('isp')
+	client = net.addHost('client')
 
 	info( '*** Adding switch\n' )
 	s1 = net.addSwitch('s1')
@@ -45,8 +45,11 @@ def fgreTopo():
 
 	info( '*** Configuring ISP \n' )
 	isp = net.get('isp')
+	
 	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
+	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:aa')
 	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
+	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:ab')
 	isp.cmd('ifconfig lo:1 20.0.0.1/16 up')
 	isp.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
 	isp.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
@@ -55,6 +58,7 @@ def fgreTopo():
 	info( '*** Configuring Client \n' )
 	client = net.get('client')
 	client.cmd('ifconfig client-eth0 30.0.100.2/24 up')
+	client.cmd('ifconfig client-eth0 hw ether 66:66:66:66:66:ac')
 	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
 	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
 	
