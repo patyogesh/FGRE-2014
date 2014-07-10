@@ -72,7 +72,7 @@ infrastructure_routing_policy = (
 	
 	(match(dstip=CLIENT_prefix, switch=2) >> fwd(SWITCH2_PORT_CLIENT)) +
 	(match(dstip=CLIENT_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH2)) +
-	(match(dstip=CLIENT_prefix, switch=4) >> fwd(SWITCH4_PORT_SWITCH2))
+	(match(dstip=CLIENT_prefix, switch=4) >> fwd(SWITCH4_PORT_SWITCH2)) +
 	
 	(match(dstip=ISP_prefix, switch=6) >> fwd(SWITCH6_PORT_ISP)) +
 	(match(dstip=CLIENT_prefix, switch=6) >> fwd(SWITCH6_PORT_SWITCH5))
