@@ -27,6 +27,7 @@ def fgreTopo():
 	s3 = net.addSwitch('s3')
 	s4 = net.addSwitch('s4')
 	s5 = net.addSwitch('s5')
+	s6 = net.addSwitch('s6')
 
 	info( '*** Creating links\n' )
 	net.addLink(mh1, s1) # S1 port 1
@@ -37,8 +38,9 @@ def fgreTopo():
 	net.addLink(s3, s4) # S3 port 2, S4 port 1
 	net.addLink(s3, s5) # S3 port 3, S5 port 2
 	net.addLink(s2, s4) # S2 port 4, S4 port 2
-	net.addLink(s1, isp) # S1 port 3
-	net.addLink(s5, isp) # S5 port 3
+	net.addLink(s1, s6) # S1 port 3, S6 port 1
+	net.addLink(s5, s6) # S5 port 3, S6 port 2
+	net.addLink(s6, isp) # S6 port 3
 
 	info( '*** Starting network\n')
 	net.start()
@@ -46,19 +48,15 @@ def fgreTopo():
 	info( '*** Configuring ISP \n' )
 	isp = net.get('isp')
 	
+	isp.cmd('echo 1 > /proc/sys/net/ipv4/ip_forward')
+	
 	isp.cmd('ifconfig isp-eth0 down')
 	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:aa up')
 	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
-	
-	isp.cmd('ifconfig isp-eth1 down')
-	isp.cmd('ifconfig isp-eth1 hw ether 66:66:66:66:66:ab up')
-	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
-
 	isp.cmd('ifconfig lo:1 20.0.0.1/16 up')
 	
 	isp.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
-	isp.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
-	isp.cmd('ip route add 30.0.0.0/16 via 30.0.2.1 dev isp-eth1')
+	isp.cmd('ip route add 30.0.0.0/16 via 30.0.1.1 dev isp-eth0')
 
 	info( '*** Configuring Client \n' )
 	client = net.get('client')

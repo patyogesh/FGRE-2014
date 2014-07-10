@@ -23,12 +23,10 @@ CLIENT_prefix = IPPrefix('30.0.100.0/24')
 ##
 #########################
 
-MAC_ISP_left = MAC('66:66:66:66:66:aa')
-MAC_ISP_right = MAC('66:66:66:66:66:ab')
+MAC_ISP = MAC('66:66:66:66:66:aa')
 MAC_CLIENT = MAC('66:66:66:66:66:ac')
 
-MAC_left_edge = MAC('00:0a:aa:bb:cc:da')
-MAC_right_edge = MAC('00:0a:aa:bb:cc:db')
+MAC_client_gw = MAC('00:0a:aa:bb:cc:da')
 MAC_netflix_gw = MAC('00:0a:aa:bb:cc:dc')
 
 #########################
@@ -55,6 +53,10 @@ SWITCH4_PORT_SWITCH3 = 1
 SWITCH5_PORT_SWITCH3 = 2
 SWITCH5_EXTERNAL_PORT = 3
 
+SWITCH6_PORT_ISP = 3
+SWITCH6_PORT_SWITCH1 = 1
+SWITCH6_PORT_SWITCH5 = 2
+
 ###############################
 ##
 ##  default pyretic policies
@@ -62,8 +64,8 @@ SWITCH5_EXTERNAL_PORT = 3
 ###############################
 
 infrastructure_routing_policy = (
-	(match(dstip=ISP_prefix, inport=SWITCH1_PORT_SWITCH2, switch=1) >> modify(srcmac=MAC_left_edge, dstmac=MAC_ISP_left) >> fwd(SWITCH1_EXTERNAL_PORT)) +
-	(match(dstip=ISP_prefix, inport=SWITCH5_PORT_SWITCH3, switch=5) >> modify(srcmac=MAC_right_edge, dstmac=MAC_ISP_right) >> fwd(SWITCH5_EXTERNAL_PORT)) +
+	(match(dstip=ISP_prefix, inport=SWITCH1_PORT_SWITCH2, switch=1) >> modify(srcmac=MAC_client_gw, dstmac=MAC_ISP) >> fwd(SWITCH1_EXTERNAL_PORT)) +
+	(match(dstip=ISP_prefix, inport=SWITCH5_PORT_SWITCH3, switch=5) >> modify(srcmac=MAC_client_gw, dstmac=MAC_ISP) >> fwd(SWITCH5_EXTERNAL_PORT)) +
 
 	(match(dstip=CLIENT_prefix, inport=SWITCH1_EXTERNAL_PORT, switch=1) >> modify(srcmac=MAC_netflix_gw, dstmac=MAC_CLIENT) >> fwd(SWITCH1_PORT_SWITCH2)) +
 	(match(dstip=CLIENT_prefix, inport=SWITCH5_EXTERNAL_PORT, switch=5) >> modify(srcmac=MAC_netflix_gw, dstmac=MAC_CLIENT) >> fwd(SWITCH5_PORT_SWITCH3)) +
@@ -71,6 +73,9 @@ infrastructure_routing_policy = (
 	(match(dstip=CLIENT_prefix, switch=2) >> fwd(SWITCH2_PORT_CLIENT)) +
 	(match(dstip=CLIENT_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH2)) +
 	(match(dstip=CLIENT_prefix, switch=4) >> fwd(SWITCH4_PORT_SWITCH2))
+	
+	(match(dstip=ISP_prefix, switch=6) >> fwd(SWITCH6_PORT_ISP)) +
+	(match(dstip=CLIENT_prefix, switch=6) >> fwd(SWITCH6_PORT_SWITCH5))
 )
 
 to_ISP_left = (
