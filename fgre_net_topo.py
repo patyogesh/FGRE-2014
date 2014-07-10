@@ -46,19 +46,27 @@ def fgreTopo():
 	info( '*** Configuring ISP \n' )
 	isp = net.get('isp')
 	
+	isp.cmd('ifconfig isp-eth0 down')
+	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:aa up')
 	isp.cmd('ifconfig isp-eth0 30.0.1.2/24 up')
-	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:aa')
+	
+	isp.cmd('ifconfig isp-eth1 down')
+	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:ab up')
 	isp.cmd('ifconfig isp-eth1 30.0.2.2/24 up')
-	isp.cmd('ifconfig isp-eth0 hw ether 66:66:66:66:66:ab')
+
 	isp.cmd('ifconfig lo:1 20.0.0.1/16 up')
+	
 	isp.cmd('arp -s 30.0.1.1 00:0a:aa:bb:cc:da')
 	isp.cmd('arp -s 30.0.2.1 00:0a:aa:bb:cc:db')
 	isp.cmd('ip route add 30.0.0.0/16 via 30.0.2.1 dev isp-eth1')
 
 	info( '*** Configuring Client \n' )
 	client = net.get('client')
+	
+	client.cmd('ifconfig client-eth0 down')
+	client.cmd('ifconfig client-eth0 hw ether 66:66:66:66:66:ac up')
 	client.cmd('ifconfig client-eth0 30.0.100.2/24 up')
-	client.cmd('ifconfig client-eth0 hw ether 66:66:66:66:66:ac')
+	
 	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
 	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
 	
