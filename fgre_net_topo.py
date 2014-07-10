@@ -22,11 +22,11 @@ def fgreTopo():
 	client = net.addHost('client', ip='30.0.0.1/24')
 
 	info( '*** Adding switch\n' )
-	s1 = net.addSwitch('s1', mac='00:00:00:00:00:01')
-	s2 = net.addSwitch('s2', mac='00:00:00:00:00:02')
-	s3 = net.addSwitch('s3', mac='00:00:00:00:00:03')
-	s4 = net.addSwitch('s4', mac='00:00:00:00:00:04')
-	s5 = net.addSwitch('s5', mac='00:00:00:00:00:05')
+	s1 = net.addSwitch('s1')
+	s2 = net.addSwitch('s2')
+	s3 = net.addSwitch('s3')
+	s4 = net.addSwitch('s4')
+	s5 = net.addSwitch('s5')
 
 	info( '*** Creating links\n' )
 	net.addLink(mh1, s1)
