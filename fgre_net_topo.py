@@ -7,13 +7,14 @@ from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from mininet.node import OVSKernelSwitch, RemoteController
 from mininet.util import customConstructor
+from mininet.link import TCLink
 
 def fgreTopo():
 	"Create an empty network and add nodes to it."
 	
 	info( '*** Adding controller\n' )
 	ctrlr = lambda n: RemoteController(n, ip='127.0.0.1', port=6633)
-	net = Mininet(controller=ctrlr, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False)
+	net = Mininet(controller=ctrlr, switch=OVSKernelSwitch, autoSetMacs=False, autoStaticArp=False, link=TCLink)
 	c1 = net.addController('c1')
 
 	info( '*** Adding hosts\n' )
