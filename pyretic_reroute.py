@@ -168,9 +168,9 @@ class reroute_interdomain(DynamicPolicy):
 		
 		self.policy = infrastructure_routing_policy + to_ISP_left
 
-		#self.ui = threading.Thread(target=self.ui_loop)
-		#self.ui.daemon = True
-		#self.ui.start()
+		self.ui = threading.Thread(target=self.ui_loop)
+		self.ui.daemon = True
+		self.ui.start()
 		
 	def update_policy (self, direction="left"):
 		print "Controller. Updating exit policy to %s. Current policy was %s" % (direction, self.direction)
