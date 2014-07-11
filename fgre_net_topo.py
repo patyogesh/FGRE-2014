@@ -74,15 +74,21 @@ def fgreTopo():
 	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
 	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
 	
+	
+	mh1.cmd('ifconfig mh1-eth0 down')
+	mh1.cmd('ifconfig mh1-eth0 hw ether ce:f4:8d:6a:d4:21 up')
+	mh1.cmd('ifconfig mh1-eth0:1 30.0.1.100/24 up')
+	
+	mh2.cmd('ifconfig mh2-eth0 down')
+	mh2.cmd('ifconfig mh2-eth0 hw ether de:70:85:4b:9b:11 up')
+	mh2.cmd('ifconfig mh2-eth0:1 30.0.1.101/24 up')
+	
 	isp.cmd('arp -s 30.0.1.100 ce:f4:8d:6a:d4:21')
 	isp.cmd('arp -s 30.0.1.101 de:70:85:4b:9b:11')
 	mh1.cmd('arp -s 30.0.1.2 66:66:66:66:66:aa')
 	mh2.cmd('arp -s 30.0.1.2 66:66:66:66:66:aa')
 	
 	root.cmd('ifconfig root-eth0 10.0.0.100/24 up')
-	
-	mh1.cmd('ifconfig mh1-eth0:1 30.0.1.100/24 up')
-	mh2.cmd('ifconfig mh2-eth0:1 30.0.1.101/24 up')
 	
 	mh1.cmd('sleep 5; python h1_rpc_client.py &')
 	mh2.cmd('sleep 5; python h2_rpc_client.py &')
