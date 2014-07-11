@@ -90,10 +90,10 @@ to_ISP_right = (
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 class DelayHandler:
-	self.delay_left = 0.00
-	self.delay_right = 0.00
 	
 	def __init__(self, policy):
+		self.delay_left = 0.00
+		self.delay_right = 0.00
 		self.policy = policy
 	
 	def set_left_delay(self, val):
