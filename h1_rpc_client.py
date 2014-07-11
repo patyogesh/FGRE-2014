@@ -1,6 +1,7 @@
 import xmlrpclib
 import threading
 import time
+import os
 
 # get the average delay
 def get_current_delay(filename):
