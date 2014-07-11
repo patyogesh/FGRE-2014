@@ -95,15 +95,33 @@ class DelayHandler:
 	def __init__(self, policy):
 		self.delay_left = 0.00
 		self.delay_right = 0.00
+		self.current_choice = "left"
 		self.policy = policy
+		self.counter = 0
+	
+	def update_decision(self):
+		if self.delay_left < self.delay_right:
+			if self.current_choice != "left":
+				self.current_choice = "left"
+				self.set_exit_choice("left")
+		else:
+			if self.current_choice != "right":
+				self.current_choice = "right"
+				self.set_exit_choice("right")
 	
 	def set_left_delay(self, val):
 		self.delay_left = val
+		self.counter += 1
+		if (counter % 10 == 0):
+			self.update_decision()
 		print "Controller. New delay for left exit point is: %.2f" % (val)
 		return True
 
 	def set_right_delay(self, val):
 		self.delay_right= val
+		self.counter += 1
+		if (counter % 10 == 0):
+			self.update_decision()
 		print "Controller. New delay for right exit point is: %.2f" % (val)
 		return True
 
