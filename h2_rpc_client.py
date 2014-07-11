@@ -9,7 +9,7 @@ def get_current_delay(filename):
 	f = open(filename, "r")
 	for line in f:
 		splitted_line = line.split()
-		cur_delay = splitted_line[5]
+		cur_delay = float(splitted_line[5])
 	f.close()
 	return cur_delay
 
