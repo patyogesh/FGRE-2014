@@ -1,7 +1,8 @@
 #!/usr/bin/python
+import os
 
 from mininet.net import Mininet
-from mininet.node import Controller
+from mininet.node import Controller, Node
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from mininet.node import OVSKernelSwitch, RemoteController
@@ -28,6 +29,7 @@ def fgreTopo():
 	s4 = net.addSwitch('s4')
 	s5 = net.addSwitch('s5')
 	s6 = net.addSwitch('s6')
+	s7 = net.addSwitch('s7')
 
 	info( '*** Creating links\n' )
 	net.addLink(mh1, s1) # S1 port 1
@@ -41,11 +43,10 @@ def fgreTopo():
 	net.addLink(s1, s6) # S1 port 3, S6 port 1
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
-
-	net.addLink(mh1, c1)
-	net.addLink(mh2, c1)
-	net.addLink(client, c1)
-
+	
+	root = Node( 'root', inNamespace=False )
+	net.addLink(root, s1)
+	
 	info( '*** Starting network\n')
 	net.start()
 
@@ -71,25 +72,9 @@ def fgreTopo():
 	
 	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
 	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
-	
-	#c1.cmd('ifconfig c1-eth0 172.16.0.1/24 up')
-	#c1.cmd('ifconfig c1-eth1 172.16.1.1/24 up')
-	#c1.cmd('ifconfig c1-eth2 172.16.2.1/24 up')
-	#mh1.cmd('ifconfig mh1-eth1 172.16.0.2/24 up')
-	#mh2.cmd('ifconfig mh2-eth1 172.16.1.2/24 up')
-	#client.cmd('ifconfig client-eth1 172.16.2.2/24 up')
-	
+		
 	info( '*** Running CLI\n' )
 	CLI(net)
-
-	#info( '*** Running ping commands\n' )
-	#host1 = net.get('mh1')
-	#result1 = host1.cmd('fping -e -c 5 -i 1000 10.0.0.2')
-	#print result1
-    #
-	#host2 = net.get('mh2')
-	#result2 = host2.cmd('fping -e -c 5 -i 1000 10.0.0.1')
-	#print result2
 
 	#info( '*** Stopping network\n' )
 	#net.stop()
