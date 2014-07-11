@@ -40,8 +40,7 @@ def fgreTopo():
 	net.addLink(s3, s4) # S3 port 2, S4 port 1
 	net.addLink(s3, s5) # S3 port 3, S5 port 2
 	net.addLink(s2, s4) # S2 port 4, S4 port 2
-	linkopts = dict(delay='100ms', loss=0, use_htb=True)
-	net.addLink(s1, s6, **linkopts) # S1 port 3, S6 port 1
+	net.addLink(s1, s6, delay='100ms') # S1 port 3, S6 port 1
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
 	
