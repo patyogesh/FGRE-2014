@@ -2,7 +2,7 @@
 import os
 
 from mininet.net import Mininet
-from mininet.node import Controller
+from mininet.node import Controller, Node
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 from mininet.node import OVSKernelSwitch, RemoteController
