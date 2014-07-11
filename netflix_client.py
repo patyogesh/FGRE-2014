@@ -32,3 +32,5 @@ def update_best_exit_point():
 			print 'Fault code:', err.faultCode
 			print 'Message   :', err.faultString
 		time.sleep(15)
+
+update_best_exit_point()
