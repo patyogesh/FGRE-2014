@@ -17,7 +17,7 @@ def get_current_delay(filename):
 def cur_ping_status():
 	print "Collecting statistics thread... Waking up"
 	os.system('./h2_ping.sh')
-	sleep(2)
+	time.sleep(2)
 	current_delay = get_current_delay("host2.txt")
 	print "Current average delay towards exit point is: %.2f" % (current_delay)
 	
