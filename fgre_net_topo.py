@@ -28,6 +28,7 @@ def fgreTopo():
 	s4 = net.addSwitch('s4')
 	s5 = net.addSwitch('s5')
 	s6 = net.addSwitch('s6')
+	s7 = net.addSwitch('s7')
 
 	info( '*** Creating links\n' )
 	net.addLink(mh1, s1) # S1 port 1
@@ -41,6 +42,8 @@ def fgreTopo():
 	net.addLink(s1, s6) # S1 port 3, S6 port 1
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
+	
+	Intf( "eth2", node=s1 ) # S1 port 4
 
 	net.addLink(mh1, c1)
 	net.addLink(mh2, c1)
