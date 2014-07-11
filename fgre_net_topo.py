@@ -77,7 +77,7 @@ def fgreTopo():
 	
 	mh1.cmd('ifconfig mh1-eth0:1 30.0.1.100/24 up')
 	mh2.cmd('ifconfig mh2-eth0:1 30.0.1.101/24 up')
-	client.cmd('ifconfig client-eth0:1 10.0.0.200/24 up')
+	client.cmd('ifconfig client-eth0:1 10.0.0.200/8 up')
 	
 	mh1.cmd('sleep 5; python h1_rpc_client.py &')
 	mh2.cmd('sleep 5; python h2_rpc_client.py &')
