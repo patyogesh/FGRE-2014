@@ -37,6 +37,7 @@ MAC_client_gw = MAC('00:0a:aa:bb:cc:dc')
 ##
 #########################
 
+SWITCH1_PORT_MH1 = 1
 SWITCH1_PORT_SWITCH2 = 2
 SWITCH1_EXTERNAL_PORT = 3
 
@@ -52,6 +53,7 @@ SWITCH3_PORT_SWITCH5 = 3
 SWITCH4_PORT_SWITCH2 = 2
 SWITCH4_PORT_SWITCH3 = 1
 
+SWITCH5_PORT_MH2 = 1
 SWITCH5_PORT_SWITCH3 = 2
 SWITCH5_EXTERNAL_PORT = 3
 
@@ -75,6 +77,12 @@ infrastructure_routing_policy = (
 	(match(dstip=CLIENT_prefix, switch=2) >> fwd(SWITCH2_PORT_CLIENT)) +
 	(match(dstip=CLIENT_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH2)) +
 	(match(dstip=CLIENT_prefix, switch=4) >> fwd(SWITCH4_PORT_SWITCH2)) +
+	
+	(match(dstmac=MAC('66:66:66:66:66:aa'), srcmac=MAC('ce:f4:8d:6a:d4:21'), switch=1) >> fwd(SWITCH1_EXTERNAL_PORT)) +
+	(match(srcmac=MAC('66:66:66:66:66:aa'), dstmac=MAC('ce:f4:8d:6a:d4:21'), switch=1) >> fwd(SWITCH5_PORT_MH2)) +
+	
+	(match(dstmac=MAC('66:66:66:66:66:aa'), srcmac=MAC('de:70:85:4b:9b:11'), switch=5) >> fwd(SWITCH5_EXTERNAL_PORT)) +
+	(match(srcmac=MAC('66:66:66:66:66:aa'), dstmac=MAC('de:70:85:4b:9b:11'), switch=5) >> fwd(SWITCH1_PORT_MH1)) +
 	
 	(match(dstip=ISP_prefix, switch=6) >> fwd(SWITCH6_PORT_ISP)) +
 	(match(dstip=CLIENT_prefix, switch=6) >> fwd(SWITCH6_PORT_SWITCH5))
