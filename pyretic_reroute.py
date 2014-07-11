@@ -104,25 +104,29 @@ class DelayHandler:
 			if self.current_choice != "left":
 				self.current_choice = "left"
 				self.set_exit_choice("left")
+			else:
+				print "Controller. Updating path. left one is still better than the right one. Not moving."
 		else:
 			if self.current_choice != "right":
 				self.current_choice = "right"
 				self.set_exit_choice("right")
+			else:
+				print "Controller. Updating path. right one is still better than the right one. Not moving."
 	
 	def set_left_delay(self, val):
 		self.delay_left = val
 		self.counter += 1
+		print "Controller. New delay for left exit point is: %.2f" % (val)
 		if (self.counter % 10 == 0):
 			self.update_decision()
-		print "Controller. New delay for left exit point is: %.2f" % (val)
 		return True
 
 	def set_right_delay(self, val):
-		self.delay_right= val
+		self.delay_right = val
 		self.counter += 1
+		print "Controller. New delay for right exit point is: %.2f" % (val)
 		if (self.counter % 10 == 0):
 			self.update_decision()
-		print "Controller. New delay for right exit point is: %.2f" % (val)
 		return True
 
 	def set_exit_choice(self, val):
