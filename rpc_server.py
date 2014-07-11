@@ -32,11 +32,6 @@ class DelayHandler:
 
 #server.register_function(disp_msg)
 
-#server.register_function(set_left_delay)
-#server.register_function(set_right_delay)
-#server.register_function(set_exit_choice)
-#server.register_function(get_delays)
-
 server.register_instance(DelayHandler())
 
 try:
