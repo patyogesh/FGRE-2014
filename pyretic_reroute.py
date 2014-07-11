@@ -165,7 +165,7 @@ class reroute_interdomain(DynamicPolicy):
 		
 		server = ServerThread(self)
 		server.start()
-		
+		self.direction = "left"
 		self.policy = infrastructure_routing_policy + to_ISP_left
 
 		self.ui = threading.Thread(target=self.ui_loop)
