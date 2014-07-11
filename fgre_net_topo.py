@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os
+import os, time
 
 from mininet.net import Mininet
 from mininet.node import Controller, Node
@@ -77,6 +77,11 @@ def fgreTopo():
 	
 	mh1.cmd('ifconfig mh1-eth0:1 30.0.1.100/24 up')
 	mh2.cmd('ifconfig mh2-eth0:1 30.0.1.101/24 up')
+	
+	time.sleep(3)
+	
+	mh1.cmd('mh1 python h1_rpc_client.py')
+	mh2.cmd('mh2 python h2_rpc_client.py')
 		
 	info( '*** Running CLI\n' )
 	CLI(net)
