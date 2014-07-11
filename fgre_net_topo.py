@@ -80,7 +80,6 @@ def fgreTopo():
 	
 	mh1.cmd('sleep 5; python h1_rpc_client.py &')
 	mh2.cmd('sleep 5; python h2_rpc_client.py &')
-	client.cmd('sleep 5; python netflix_client.py &')
 		
 	info( '*** Running CLI\n' )
 	CLI(net)
