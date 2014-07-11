@@ -112,7 +112,7 @@ class DelayHandler:
 	def set_left_delay(self, val):
 		self.delay_left = val
 		self.counter += 1
-		if (counter % 10 == 0):
+		if (self.counter % 10 == 0):
 			self.update_decision()
 		print "Controller. New delay for left exit point is: %.2f" % (val)
 		return True
@@ -120,7 +120,7 @@ class DelayHandler:
 	def set_right_delay(self, val):
 		self.delay_right= val
 		self.counter += 1
-		if (counter % 10 == 0):
+		if (self.counter % 10 == 0):
 			self.update_decision()
 		print "Controller. New delay for right exit point is: %.2f" % (val)
 		return True
