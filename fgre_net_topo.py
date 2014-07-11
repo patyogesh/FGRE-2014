@@ -72,6 +72,9 @@ def fgreTopo():
 	
 	client.cmd('arp -s 30.0.100.1 00:0a:aa:bb:cc:dc')
 	client.cmd('ip route add 20.0.0.0/16 via 30.0.100.1 dev client-eth0')
+	
+	mh1.cmd('mh1 ifconfig mh1-eth0:1 30.0.1.100/24 up')
+	mh2.cmd('mh2 ifconfig mh2-eth0:1 30.0.2.100/24 up')
 		
 	info( '*** Running CLI\n' )
 	CLI(net)
