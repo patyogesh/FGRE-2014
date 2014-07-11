@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
 from mininet.net import Mininet
-from mininet.link import Intf
 from mininet.node import Controller
 from mininet.cli import CLI
 from mininet.log import setLogLevel, info
@@ -44,7 +43,13 @@ def fgreTopo():
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
 	
-	Intf( "eth2", node=mh1 ) # S1 port 4
+	net.addLink(mh1, c1)
+	net.addLink(mh2, c1)
+	net.addLink(client, c1)
+	
+	os.system('iface c1-eth0 inet manual')
+	os.system('iface c1-eth1 inet manual')
+	os.system('iface c1-eth2 inet manual')
 
 	info( '*** Starting network\n')
 	net.start()
