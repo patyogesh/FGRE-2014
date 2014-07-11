@@ -46,10 +46,6 @@ def fgreTopo():
 	
 	Intf( "eth2", node=s1 ) # S1 port 4
 
-	net.addLink(mh1, c1)
-	net.addLink(mh2, c1)
-	net.addLink(client, c1)
-
 	info( '*** Starting network\n')
 	net.start()
 
