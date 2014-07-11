@@ -7,6 +7,7 @@
 from pyretic.lib.corelib import *
 from pyretic.lib.std import *
 from pyretic.modules.mac_learner import mac_learner
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 #########################
 ##
@@ -87,7 +88,6 @@ to_ISP_right = (
 	(match(dstip=ISP_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH5))
 )
 
-from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 class DelayHandler:
 	
@@ -128,6 +128,8 @@ class reroute_interdomain(DynamicPolicy):
 		delay_handler = DelayHandler(self)
 		server.register_instance(delay_handler)
 		server.serve_forever()
+		
+		print "pouet"
 		
 		self.policy = infrastructure_routing_policy + to_ISP_left
 		#self.ui = threading.Thread(target=self.ui_loop)
