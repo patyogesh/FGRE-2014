@@ -1,7 +1,7 @@
 #!/bin/bash
 rtt=1
 PingCount=5
-IP1=30.0.2.2
+IP1=30.0.1.2
 
 rm host2.txt
 fping -e -q  $IP1 -c $PingCount 2> out.txt

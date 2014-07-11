@@ -24,7 +24,7 @@ def cur_ping_status():
 		print "Updating the controller with latest delays updates..."
 		proxy = xmlrpclib.Server('http://10.0.0.100:8081', allow_none=True)
 		try:
-			print proxy.set_right_delay(current_delay)
+			print proxy.set_left_delay(current_delay)
 		except Exception, err:
 		    print 'Fault code:', err.faultCode
 		    print 'Message   :', err.faultString
