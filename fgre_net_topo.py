@@ -51,6 +51,7 @@ def fgreTopo():
 	os.system('iface c1-eth0 inet manual')
 	os.system('iface c1-eth1 inet manual')
 	os.system('iface c1-eth2 inet manual')
+	os.system('service network-manager restart')
 
 	info( '*** Starting network\n')
 	net.start()
