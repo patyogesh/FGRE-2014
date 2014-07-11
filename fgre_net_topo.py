@@ -44,15 +44,9 @@ def fgreTopo():
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
 	
-	net.addLink(mh1, c1)
-	#net.addLink(mh2, c1)
-	#net.addLink(client, c1)
+	root = Node( 'root', inNamespace=False )
+	net.addLink(root, s1)
 	
-	os.system('iface c1-eth0 inet manual')
-	os.system('iface c1-eth1 inet manual')
-	os.system('iface c1-eth2 inet manual')
-	os.system('service network-manager restart')
-
 	info( '*** Starting network\n')
 	net.start()
 
