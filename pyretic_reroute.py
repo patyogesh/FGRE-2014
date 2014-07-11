@@ -122,7 +122,7 @@ class DelayHandler:
 class ServerThread(threading.Thread):
 	def __init__(self,policy):
 		threading.Thread.__init__(self)
-		self.localServer = SimpleThreadedXMLRPCServer(('0.0.0.0', 8081))
+		self.localServer = SimpleXMLRPCServer(('0.0.0.0', 8081), allow_none=True)
 		self.localServer.register_instance(DelayHandler(policy))
 
 	def run(self):
