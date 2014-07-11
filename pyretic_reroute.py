@@ -87,26 +87,61 @@ to_ISP_right = (
 	(match(dstip=ISP_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH5))
 )
 
+from SimpleXMLRPCServer import SimpleXMLRPCServer
+
+class DelayHandler:
+	self.delay_left = 0.00
+	self.delay_right = 0.00
+	
+	def __init__(self, policy):
+		self.policy = policy
+	
+	def set_left_delay(self, val):
+		self.delay_left = val
+		print "Controller. New delay for left exit point is: %.2f" % (val)
+		return True
+
+	def set_right_delay(self, val):
+		self.delay_right= val
+		print "Controller. New delay for right exit point is: %.2f" % (val)
+		return True
+
+	def set_exit_choice(self, val):
+		if val == "left" or val == "right":
+			self.policy.update_policy(val)
+		else:
+			pass
+		return True
+
+	def get_delays(self):
+		return (self.delay_left, self.delay_right)
+
 class reroute_interdomain(DynamicPolicy):
 	
 	def __init__(self):
 		print "Initializing reroute policy"
 		super(reroute_interdomain,self).__init__(identity)
 		import threading
-		self.direction = "left"
+		
+		# server URL
+		server = SimpleXMLRPCServer(('0.0.0.0', 8081), allow_none=True)
+		delay_handler = DelayHandler(self)
+		server.register_instance(delay_handler)
+		server.serve_forever()
+		
 		self.policy = infrastructure_routing_policy + to_ISP_left
-		self.ui = threading.Thread(target=self.ui_loop)
-		self.ui.daemon = True
-		self.ui.start()
+		#self.ui = threading.Thread(target=self.ui_loop)
+		#self.ui.daemon = True
+		#self.ui.start()
 		
 	def update_policy (self, direction="left"):
+		print "Controller. Updating exit policy to %s. Current policy was %s" % (direction, self.direction)
 		if direction == "left":
 			self.direction = "left"
 			self.policy = infrastructure_routing_policy + to_ISP_left
 		else:
 			self.direction = "right"
 			self.policy = infrastructure_routing_policy + to_ISP_right
-		print "Current policy: ", self.policy
 	
 	def ui_loop(self):
 		while(True):

@@ -1,45 +1,32 @@
 import xmlrpclib
-import subprocess
 import threading
+import time
+
+# get the average delay
+def get_current_delay(filename):
+	f = open(filename, "r")
+	for line in f:
+		splitted_line = line.split()
+		cur_delay = splitted_line[5]
+	f.close()
+	return cur_delay
 
 # update the link delays with current latency between links  based on ping results
 def cur_ping_status():
-   threading.Timer(6.0, cur_ping_status).start()
-	 #run shell script in the background every 'n' seconds
-	 subprocess.Popen(['./h1_ping.sh'])
+	print "Collecting statistics thread... Waking up"
+	os.system('./h1_ping.sh')
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# RPC 
+	sleep(2)
 
-proxy = xmlrpclib.Server('http://localhost:8081', allow_none=True)
-try:
-    #print proxy.disp_msg('Hello')
-    print proxy.set_left_delay(get_current_delay())
-    #print proxy.get_delays()
+	current_delay = get_current_delay("host1.txt")
+	print "Current average delay towards exit point is: %.2f" % (current_delay)
+	
+	print "Updating the controller with latest delays updates..."
+	proxy = xmlrpclib.Server('http://10.0.0.100:8081', allow_none=True)
+	try:
+		print proxy.set_right_delay(current_delay)
+	except Exception, err:
+	    print 'Fault code:', err.faultCode
+	    print 'Message   :', err.faultString
 
-except Exception, err:
-    print 'Fault code:', err.faultCode
-    print 'Message   :', err.faultString
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# retrives current latency values from the files and returns average delay 
-
-# tokenize the line written in the file and store each column in array
-tokens = []
-def read_by_tokens(fileobj):
-    for line in fileobj:
-        for token in line.split():
-            tokens.append(token)
-
-# get the average delay between host 1  or host 2 and isp
-def get_current_delay():
-	filename = "host1.txt"
-	with open(filename,"r") as f:
-		global tokens
-		read_by_tokens(f)
-		cur_delay = tokens[5]
-		tokens = []
-		return cur_delay
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~		
+threading.Timer(5.0, cur_ping_status).start()

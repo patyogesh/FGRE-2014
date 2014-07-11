@@ -39,6 +39,3 @@ try:
     server.serve_forever()
 except KeyboardInterrupt:
     print 'Exiting'
-
-
-
