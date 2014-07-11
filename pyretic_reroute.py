@@ -78,12 +78,6 @@ infrastructure_routing_policy = (
 	(match(dstip=CLIENT_prefix, switch=3) >> fwd(SWITCH3_PORT_SWITCH2)) +
 	(match(dstip=CLIENT_prefix, switch=4) >> fwd(SWITCH4_PORT_SWITCH2)) +
 	
-	(match(dstmac=MAC('66:66:66:66:66:aa'), srcmac=MAC('ce:f4:8d:6a:d4:21'), inport=SWITCH1_PORT_MH1, switch=1) >> fwd(SWITCH1_EXTERNAL_PORT)) +
-	(match(srcmac=MAC('66:66:66:66:66:aa'), dstmac=MAC('ce:f4:8d:6a:d4:21'), inport=SWITCH1_EXTERNAL_PORT, switch=1) >> fwd(SWITCH1_PORT_MH1)) +
-	
-	(match(dstmac=MAC('66:66:66:66:66:aa'), srcmac=MAC('de:70:85:4b:9b:11'), inport=SWITCH5_PORT_MH2, switch=5) >> fwd(SWITCH5_EXTERNAL_PORT)) +
-	(match(srcmac=MAC('66:66:66:66:66:aa'), dstmac=MAC('de:70:85:4b:9b:11'), inport=SWITCH5_EXTERNAL_PORT, switch=5) >> fwd(SWITCH5_PORT_MH2)) +
-	
 	(match(dstip=ISP_prefix, switch=6) >> fwd(SWITCH6_PORT_ISP)) +
 	(match(dstip=CLIENT_prefix, switch=6) >> fwd(SWITCH6_PORT_SWITCH5))
 )
@@ -165,9 +159,9 @@ class reroute_interdomain(DynamicPolicy):
 		
 		server = ServerThread(self)
 		server.start()
+
 		self.direction = "left"
 		self.policy = infrastructure_routing_policy + to_ISP_left
-
 		self.ui = threading.Thread(target=self.ui_loop)
 		self.ui.daemon = True
 		self.ui.start()
