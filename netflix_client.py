@@ -31,4 +31,4 @@ def update_best_exit_point():
 		except Exception, err:
 			print 'Fault code:', err.faultCode
 			print 'Message   :', err.faultString
-		time.sleep(10)
+		time.sleep(15)
