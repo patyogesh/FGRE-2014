@@ -76,7 +76,7 @@ def fgreTopo():
 	root.cmd('ifconfig root-eth0 10.0.0.100/24 up')
 	
 	mh1.cmd('ifconfig mh1-eth0:1 30.0.1.100/24 up')
-	mh2.cmd('ifconfig mh2-eth0:1 30.0.2.100/24 up')
+	mh2.cmd('ifconfig mh2-eth0:1 30.0.1.101/24 up')
 		
 	info( '*** Running CLI\n' )
 	CLI(net)
