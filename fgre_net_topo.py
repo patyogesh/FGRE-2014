@@ -33,17 +33,17 @@ def fgreTopo():
 	s7 = net.addSwitch('s7')
 
 	info( '*** Creating links\n' )
-	net.addLink(mh1, s1) # S1 port 1
-	net.addLink(client, s2) # S2 port 1
-	net.addLink(mh2, s5) # S5 port 1
-	net.addLink(s1, s2) # S1 port 2, S2 port 2 
-	net.addLink(s2, s3) # S2 port 3, S3 port 1
-	net.addLink(s3, s4) # S3 port 2, S4 port 1
-	net.addLink(s3, s5) # S3 port 3, S5 port 2
-	net.addLink(s2, s4) # S2 port 4, S4 port 2
+	net.addLink(mh1, s1, delay='1ms') # S1 port 1
+	net.addLink(client, s2, delay='1ms') # S2 port 1
+	net.addLink(mh2, s5, delay='1ms') # S5 port 1
+	net.addLink(s1, s2, delay='1ms') # S1 port 2, S2 port 2 
+	net.addLink(s2, s3, delay='1ms') # S2 port 3, S3 port 1
+	net.addLink(s3, s4, delay='1ms') # S3 port 2, S4 port 1
+	net.addLink(s3, s5, delay='1ms') # S3 port 3, S5 port 2
+	net.addLink(s2, s4, delay='1ms') # S2 port 4, S4 port 2
 	net.addLink(s1, s6, delay='100ms') # S1 port 3, S6 port 1
-	net.addLink(s5, s6) # S5 port 3, S6 port 2
-	net.addLink(s6, isp) # S6 port 3
+	net.addLink(s5, s6, delay='1ms') # S5 port 3, S6 port 2
+	net.addLink(s6, isp, delay='1ms') # S6 port 3
 	
 	root = Node( 'root', inNamespace=False )
 	net.addLink(root, s1)
