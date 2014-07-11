@@ -42,9 +42,9 @@ def fgreTopo():
 	net.addLink(s5, s6) # S5 port 3, S6 port 2
 	net.addLink(s6, isp) # S6 port 3
 
-	#net.addLink(mh1, c1)
-	#net.addLink(mh2, c1)
-	#net.addLink(client, c1)
+	net.addLink(mh1, c1)
+	net.addLink(mh2, c1)
+	net.addLink(client, c1)
 
 	info( '*** Starting network\n')
 	net.start()
