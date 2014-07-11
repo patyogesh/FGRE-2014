@@ -7,7 +7,9 @@
 from pyretic.lib.corelib import *
 from pyretic.lib.std import *
 from pyretic.modules.mac_learner import mac_learner
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+import threading
+import SocketServer
+from SimpleXMLRPCServer import SimpleXMLRPCServer,SimpleXMLRPCRequestHandler
 
 #########################
 ##
@@ -116,17 +118,18 @@ class DelayHandler:
 	def get_delays(self):
 		return (self.delay_left, self.delay_right)
 
+# Threaded mix-in
+class AsyncXMLRPCServer(SocketServer.ThreadingMixIn,SimpleXMLRPCServer): 
+	pass
+
 class reroute_interdomain(DynamicPolicy):
 	
 	def __init__(self):
 		print "Initializing reroute policy"
 		super(reroute_interdomain,self).__init__(identity)
-		import threading
 		
-		# server URL
-		server = SimpleXMLRPCServer(('0.0.0.0', 8081), allow_none=True)
-		delay_handler = DelayHandler(self)
-		server.register_instance(delay_handler)
+		server = AsyncXMLRPCServer(('0.0.0.0', 8081), allow_none=True)
+		server.register_instance(DelayHandler(self))
 		server.serve_forever()
 		
 		print "pouet"
