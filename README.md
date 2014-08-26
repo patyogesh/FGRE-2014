@@ -3,6 +3,8 @@ FGRE-2014-Inter-Domain-Routing-using-SDN-Controller
 
 ##Requirements:
 
+The following assume a Linux machine on which both the SDN controller and mininet are run.
+
 - Install pyretic from https://github.com/frenetic-lang/pyretic
 - Install mininet from https://github.com/mininet/mininet
 - Copy the pyretic-reroute.py to the pyretic directory under pyretic/examples
@@ -18,7 +20,7 @@ sudo python fgre_net_topo.py
 - Then, start the pyretic controller with the reroute application
 
 ```
-./pyretic.py pyretic.examples.pyretic_reroute
+./pyretic.py -m p0 pyretic.examples.pyretic_reroute
 ```
 
 - Once pyretic has started, a CLI takes over offering three choices: (r)eroute, (s)ee, and (q)uit
@@ -57,5 +59,63 @@ Current policy being implemented is going to left: parallel:
         match: ('switch', 2) ('dstip', 20.0.0.0/16)
         fwd 2
 (r)eroute, (s)ee, or (q)uit?
+```
+
+The Pyretic controller should also receive measurements coming from the two measurements stations mh1 and mh2
+
+```
+...
+Controller. New delay for left exit point is: 315.00
+10.0.0.1 - - [26/Aug/2014 17:49:23] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for right exit point is: 393.00
+10.0.0.2 - - [26/Aug/2014 17:49:28] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for left exit point is: 237.00
+10.0.0.1 - - [26/Aug/2014 17:49:34] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for right exit point is: 312.00
+10.0.0.2 - - [26/Aug/2014 17:49:40] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for left exit point is: 219.00
+10.0.0.1 - - [26/Aug/2014 17:49:46] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for right exit point is: 241.00
+10.0.0.2 - - [26/Aug/2014 17:49:52] "POST /RPC2 HTTP/1.1" 200 -
+Controller. New delay for left exit point is: 223.00
+10.0.0.1 - - [26/Aug/2014 17:49:57] "POST /RPC2 HTTP/1.1" 200 -
+...
+```
+
+By default, traffic from the client to the ISP is going via the left exit point. The delay on that link has been artificially increased (see the mininet configuration for how to do that). To measure latency, you can use ping in mininet directly.
+
+```mininet> client ping 20.0.0.1
+PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
+64 bytes from 20.0.0.1: icmp_req=1 ttl=64 time=111 ms
+64 bytes from 20.0.0.1: icmp_req=2 ttl=64 time=113 ms
+64 bytes from 20.0.0.1: icmp_req=3 ttl=64 time=128 ms
+64 bytes from 20.0.0.1: icmp_req=4 ttl=64 time=110 ms
+64 bytes from 20.0.0.1: icmp_req=5 ttl=64 time=111 ms
+...
+```
+
+As the latency on the right exit point is lower, rerouting the traffic to it will improve the RTT. To do that, just press "r" in the controller window, and then enter "right":
+
+```
+...
+Invalid option
+(r)eroute, (s)ee, or (q)uit? r
+enter "left" or "right" right
+...
+```
+
+Once this is done, the controller automatically reroute the flow to the right exit point. This has for effect to reduce the RTT betweent the client and the ISP. You can check the output of mininet for that:
+
+```
+64 bytes from 20.0.0.1: icmp_req=191 ttl=64 time=111 ms
+64 bytes from 20.0.0.1: icmp_req=192 ttl=64 time=111 ms
+64 bytes from 20.0.0.1: icmp_req=193 ttl=64 time=120 ms
+64 bytes from 20.0.0.1: icmp_req=194 ttl=64 time=139 ms
+64 bytes from 20.0.0.1: icmp_req=195 ttl=64 time=120 ms
+64 bytes from 20.0.0.1: icmp_req=196 ttl=64 time=36.0 ms
+64 bytes from 20.0.0.1: icmp_req=197 ttl=64 time=13.0 ms
+64 bytes from 20.0.0.1: icmp_req=198 ttl=64 time=13.1 ms
+64 bytes from 20.0.0.1: icmp_req=199 ttl=64 time=13.5 ms
+64 bytes from 20.0.0.1: icmp_req=200 ttl=64 time=13.1 ms
 ```
 
