@@ -121,3 +121,8 @@ Once this is done, the controller automatically reroute the flow to the right ex
 64 bytes from 20.0.0.1: icmp_req=200 ttl=64 time=13.1 ms
 ```
 
+Similarly, rerouting the traffic to the left will increase the RTT:
+
+##TODO:
+
+- The controller should normally reroute the flows by itself based on the measurements, currently this is done manually.
