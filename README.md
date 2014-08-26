@@ -84,7 +84,9 @@ Controller. New delay for left exit point is: 223.00
 
 By default, traffic from the client to the ISP is going via the left exit point. The delay on that link has been artificially increased (see the mininet configuration for how to do that). To measure latency, you can use ping in mininet directly.
 
-```mininet> client ping 20.0.0.1
+```
+...
+mininet> client ping 20.0.0.1
 PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
 64 bytes from 20.0.0.1: icmp_req=1 ttl=64 time=111 ms
 64 bytes from 20.0.0.1: icmp_req=2 ttl=64 time=113 ms
